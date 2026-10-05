@@ -1,29 +1,29 @@
 from test_data import *
+from policy import POLICY
 
 
-def json_search(key, input_object):
+def json_search(key, input_object, role=None):
+    # Key có policy nhưng role không được phép: từ chối ngay
+    if key in POLICY and role not in POLICY[key]:
+        return []
+
     ret_val = []
 
     if isinstance(input_object, dict):
         for k, v in input_object.items():
             if k == key:
-                temp = {k: v}
-                ret_val.append(temp)
+                ret_val.append({k: v})
 
-            if isinstance(v, dict):
-                ret_val.extend(json_search(key, v))
+            if isinstance(v, (dict, list)):
+                ret_val.extend(json_search(key, v, role))
 
-            elif isinstance(v, list):
-                for item in v:
-                    if not isinstance(item, (str, int)):
-                        ret_val.extend(json_search(key, item))
-
-    else:
-        for val in input_object:
-            if not isinstance(val, (str, int)):
-                ret_val.extend(json_search(key, val))
+    elif isinstance(input_object, list):
+        for item in input_object:
+            if isinstance(item, (dict, list)):
+                ret_val.extend(json_search(key, item, role))
 
     return ret_val
 
 
-print(json_search("issueSummary", data))
+if __name__ == "__main__":
+    print(json_search("issueSummary", data, role="viewer"))
