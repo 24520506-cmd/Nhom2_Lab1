@@ -52,12 +52,6 @@ Việc từ chối truy cập không được đưa giá trị thật của trư
 
 **Tiêu chí kiểm thử:** lời gọi bị từ chối trả `[]`; nếu có log/thông báo lỗi, kiểm tra chúng không chứa giá trị secret từ fixture.
 
-### SR-08 — Role lấy từ ngữ cảnh xác thực (tầng tích hợp)
-
-Backend phải lấy role từ phiên hoặc ngữ cảnh người dùng đã được xác thực, không tin trực tiếp role do client gửi. Hàm nhận chuỗi `"admin"` không thể tự biết chuỗi đó có bị giả mạo hay không.
-
-**Tiêu chí kiểm thử tích hợp:** viewer gửi role admin qua request vẫn bị xử lý với quyền viewer. Unit test chỉ truyền `role="admin"` vào hàm không chứng minh được yêu cầu này.
-
 ## 3. Ma trận kiểm thử tối thiểu
 
 | Key | `admin` | `operator` | `viewer` |
